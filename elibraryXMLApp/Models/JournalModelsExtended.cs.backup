@@ -1,0 +1,458 @@
+using System.Xml.Serialization;
+
+namespace elibraryXMLApp.Models;
+
+/// <summary>
+/// Расширенные модели данных с полной поддержкой схемы journal.xsd
+/// Extended data models with full journal.xsd schema support
+/// </summary>
+
+[XmlRoot("journal")]
+public class JournalExtended
+{
+    [XmlElement("titleid")]
+    public uint TitleId { get; set; }
+
+    [XmlElement("issn")]
+    public string? Issn { get; set; }
+
+    [XmlElement("eissn")]
+    public string? Eissn { get; set; }
+
+    [XmlElement("journalInfo")]
+    public JournalInfoExtended JournalInfo { get; set; } = new JournalInfoExtended();
+
+    [XmlElement("issue")]
+    public IssueExtended Issue { get; set; } = new IssueExtended();
+}
+
+public class JournalInfoExtended
+{
+    [XmlElement("title")]
+    public string Title { get; set; } = string.Empty;
+
+    [XmlAttribute("lang")]
+    public string? Lang { get; set; } = "RUS";
+}
+
+public class IssueExtended
+{
+    [XmlAttribute("type")]
+    public string? Type { get; set; } // ISS, OFI, SPI
+
+    [XmlElement("volume")]
+    public uint Volume { get; set; }
+
+    [XmlElement("number")]
+    public string? Number { get; set; }
+
+    [XmlElement("altNumber")]
+    public string? AltNumber { get; set; }
+
+    [XmlElement("part")]
+    public ushort Part { get; set; }
+
+    [XmlElement("pages")]
+    public string? Pages { get; set; }
+
+    [XmlElement("dateUni")]
+    public ushort DateUni { get; set; }
+
+    [XmlElement("issTitle")]
+    public List<IssTitleExtended> IssTitles { get; set; } = new List<IssTitleExtended>();
+
+    [XmlElement("codes")]
+    public IssueCodesExtended? Codes { get; set; }
+
+    [XmlElement("articles")]
+    public ArticlesExtended Articles { get; set; } = new ArticlesExtended();
+
+    [XmlElement("files")]
+    public IssueFiles? Files { get; set; }
+}
+
+public class IssTitleExtended
+{
+    [XmlAttribute("lang")]
+    public string? Lang { get; set; } = "RUS";
+
+    [XmlText]
+    public string Value { get; set; } = string.Empty;
+}
+
+public class IssueCodesExtended
+{
+    [XmlElement("doi")]
+    public string? Doi { get; set; }
+
+    [XmlElement("edn")]
+    public string? Edn { get; set; }
+}
+
+public class IssueFiles
+{
+    [XmlElement("file")]
+    public List<IssueFile> FileList { get; set; } = new List<IssueFile>();
+}
+
+public class IssueFile
+{
+    [XmlAttribute("desc")]
+    public string Desc { get; set; } = "cover"; // Only "cover" is valid
+
+    [XmlText]
+    public string Value { get; set; } = string.Empty;
+}
+
+public class ArticlesExtended
+{
+    [XmlElement("section", typeof(Section))]
+    [XmlElement("article", typeof(ArticleExtended))]
+    public List<object> Items { get; set; } = new List<object>();
+}
+
+public class Section
+{
+    [XmlElement("secTitle")]
+    public List<SecTitle> Titles { get; set; } = new List<SecTitle>();
+}
+
+public class SecTitle
+{
+    [XmlAttribute("lang")]
+    public string Lang { get; set; } = "RUS";
+
+    [XmlText]
+    public string Value { get; set; } = string.Empty;
+}
+
+public class ArticleExtended
+{
+    [XmlElement("artType")]
+    public string ArtType { get; set; } = "RAR";
+
+    [XmlElement("pages")]
+    public string Pages { get; set; } = string.Empty;
+
+    [XmlElement("langPubl")]
+    public string? LangPubl { get; set; }
+
+    [XmlElement("authors")]
+    public AuthorsExtended? Authors { get; set; }
+
+    [XmlElement("artTitles")]
+    public ArtTitlesExtended ArtTitles { get; set; } = new ArtTitlesExtended();
+
+    [XmlElement("abstracts")]
+    public AbstractsExtended? Abstracts { get; set; }
+
+    // КРИТИЧЕСКИ ВАЖНО: обязательный элемент!
+    // CRITICAL: required element!
+    [XmlElement("text")]
+    public List<ArticleText> Texts { get; set; } = new List<ArticleText>();
+
+    [XmlElement("codes")]
+    public ArticleCodesExtended? Codes { get; set; }
+
+    [XmlElement("keywords")]
+    public KeywordsExtended? Keywords { get; set; }
+
+    [XmlElement("references")]
+    public ReferencesExtended? References { get; set; }
+
+    [XmlElement("files")]
+    public ArticleFiles? Files { get; set; }
+
+    [XmlElement("rubrics")]
+    public Rubrics? Rubrics { get; set; }
+
+    [XmlElement("dates")]
+    public ArticleDates? Dates { get; set; }
+
+    [XmlElement("fundings")]
+    public Fundings? Fundings { get; set; }
+}
+
+public class ArticleText
+{
+    [XmlAttribute("lang")]
+    public string? Lang { get; set; }
+
+    [XmlText]
+    public string Value { get; set; } = string.Empty;
+}
+
+public class AuthorsExtended
+{
+    [XmlElement("author")]
+    public List<AuthorExtended> AuthorList { get; set; } = new List<AuthorExtended>();
+}
+
+public class AuthorExtended
+{
+    // КРИТИЧЕСКИ ВАЖНО: обязательный атрибут!
+    // CRITICAL: required attribute!
+    [XmlAttribute("num")]
+    public uint Num { get; set; }
+
+    [XmlAttribute("id")]
+    public string? Id { get; set; } // Deprecated
+
+    [XmlElement("role")]
+    public string? Role { get; set; } // 0-48, see typeRole
+
+    [XmlElement("correspondent")]
+    public string? Correspondent { get; set; } // 0, 1
+
+    [XmlElement("authorCodes")]
+    public AuthorCodes? AuthorCodes { get; set; }
+
+    [XmlElement("individInfo")]
+    public List<IndividInfoExtended> IndividInfos { get; set; } = new List<IndividInfoExtended>();
+}
+
+public class AuthorCodes
+{
+    [XmlElement("researcherid")]
+    public string? ResearcherId { get; set; }
+
+    [XmlElement("spin")]
+    public string? Spin { get; set; } // Format: XXXX-XXXX
+
+    [XmlElement("scopusid")]
+    public string? ScopusId { get; set; }
+
+    [XmlElement("orcid")]
+    public string? Orcid { get; set; }
+}
+
+public class IndividInfoExtended
+{
+    [XmlAttribute("lang")]
+    public string Lang { get; set; } = "RUS";
+
+    [XmlElement("surname")]
+    public string Surname { get; set; } = string.Empty;
+
+    [XmlElement("initials")]
+    public string? Initials { get; set; }
+
+    [XmlElement("orgName")]
+    public OrgName? OrgName { get; set; }
+
+    [XmlElement("address")]
+    public string? Address { get; set; }
+
+    [XmlElement("town")]
+    public string? Town { get; set; }
+
+    [XmlElement("country")]
+    public string? Country { get; set; }
+
+    [XmlElement("otherInfo")]
+    public string? OtherInfo { get; set; }
+
+    [XmlElement("email")]
+    public Email? Email { get; set; }
+
+    [XmlElement("comment")]
+    public string? Comment { get; set; }
+}
+
+public class OrgName
+{
+    [XmlAttribute("notAuthentic")]
+    public byte NotAuthentic { get; set; }
+
+    [XmlText]
+    public string Value { get; set; } = string.Empty;
+}
+
+public class Email
+{
+    [XmlAttribute("notAuthentic")]
+    public byte NotAuthentic { get; set; }
+
+    [XmlText]
+    public string Value { get; set; } = string.Empty;
+}
+
+public class ArtTitlesExtended
+{
+    [XmlElement("artTitle")]
+    public List<ArtTitleExtended> TitleList { get; set; } = new List<ArtTitleExtended>();
+}
+
+public class ArtTitleExtended
+{
+    [XmlAttribute("lang")]
+    public string Lang { get; set; } = "RUS";
+
+    [XmlText]
+    public string Value { get; set; } = string.Empty;
+}
+
+public class AbstractsExtended
+{
+    [XmlElement("abstract")]
+    public List<AbstractExtended> AbstractList { get; set; } = new List<AbstractExtended>();
+}
+
+public class AbstractExtended
+{
+    [XmlAttribute("lang")]
+    public string Lang { get; set; } = "RUS";
+
+    [XmlText]
+    public string Value { get; set; } = string.Empty;
+}
+
+public class KeywordsExtended
+{
+    [XmlElement("kwdGroup")]
+    public List<KwdGroupExtended> KwdGroupList { get; set; } = new List<KwdGroupExtended>();
+}
+
+public class KwdGroupExtended
+{
+    [XmlAttribute("lang")]
+    public string Lang { get; set; } = "RUS";
+
+    [XmlElement("keyword")]
+    public List<string> KeywordList { get; set; } = new List<string>();
+}
+
+public class ArticleCodesExtended
+{
+    [XmlElement("doi")]
+    public string? Doi { get; set; }
+
+    [XmlElement("edn")]
+    public string? Edn { get; set; } // 6 Latin characters
+
+    [XmlElement("udk")]
+    public string? Udk { get; set; }
+
+    [XmlElement("bbk")]
+    public string? Bbk { get; set; }
+
+    [XmlElement("vak")]
+    public string? Vak { get; set; }
+
+    [XmlElement("vak21")]
+    public string? Vak21 { get; set; }
+
+    [XmlElement("jel")]
+    public string? Jel { get; set; }
+
+    [XmlElement("msc")]
+    public string? Msc { get; set; }
+
+    [XmlElement("pacs")]
+    public string? Pacs { get; set; }
+}
+
+public class ReferencesExtended
+{
+    [XmlElement("reference")]
+    public List<ReferenceExtended> ReferenceList { get; set; } = new List<ReferenceExtended>();
+}
+
+public class ReferenceExtended
+{
+    [XmlElement("refInfo")]
+    public RefInfoExtended RefInfo { get; set; } = new RefInfoExtended();
+}
+
+public class RefInfoExtended
+{
+    [XmlAttribute("lang")]
+    public string Lang { get; set; } = "RUS";
+
+    [XmlElement("text")]
+    public string? Text { get; set; }
+
+    [XmlElement("elements")]
+    public ReferenceElements? Elements { get; set; }
+}
+
+public class ReferenceElements
+{
+    [XmlElement("element")]
+    public List<ReferenceElement> ElementList { get; set; } = new List<ReferenceElement>();
+}
+
+public class ReferenceElement
+{
+    [XmlAttribute("field")]
+    public string Field { get; set; } = string.Empty; // Authors, Title, DOI, etc.
+
+    [XmlText]
+    public string Value { get; set; } = string.Empty;
+}
+
+public class ArticleFiles
+{
+    [XmlElement("file")]
+    public List<ArticleFile> FileList { get; set; } = new List<ArticleFile>();
+
+    [XmlElement("furl")]
+    public List<FileUrl> UrlList { get; set; } = new List<FileUrl>();
+}
+
+public class ArticleFile
+{
+    [XmlAttribute("desc")]
+    public string? Desc { get; set; } // fullText, addition, illustration
+
+    [XmlAttribute("lang")]
+    public string? Lang { get; set; }
+
+    [XmlText]
+    public string Value { get; set; } = string.Empty;
+}
+
+public class FileUrl
+{
+    [XmlAttribute("desc")]
+    public string? Desc { get; set; } // fullText, preprint, etc.
+
+    [XmlAttribute("lang")]
+    public string? Lang { get; set; }
+
+    [XmlText]
+    public string Value { get; set; } = string.Empty;
+}
+
+public class Rubrics
+{
+    [XmlElement("rubric")]
+    public List<string> RubricList { get; set; } = new List<string>();
+}
+
+public class ArticleDates
+{
+    [XmlElement("dateReceived")]
+    public string? DateReceived { get; set; } // Format: дд.мм.гггг
+
+    [XmlElement("dateAccepted")]
+    public string? DateAccepted { get; set; }
+
+    [XmlElement("datePublication")]
+    public string? DatePublication { get; set; }
+}
+
+public class Fundings
+{
+    [XmlElement("funding")]
+    public List<Funding> FundingList { get; set; } = new List<Funding>();
+}
+
+public class Funding
+{
+    [XmlAttribute("lang")]
+    public string? Lang { get; set; }
+
+    [XmlText]
+    public string Value { get; set; } = string.Empty;
+}
