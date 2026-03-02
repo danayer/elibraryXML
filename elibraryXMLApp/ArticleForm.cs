@@ -50,6 +50,9 @@ public partial class ArticleForm : Form
         // Initialize Article Type ComboBox with default selection
         cmbArticleType.SelectedIndex = 0; // Default to "RAR - Научная статья"
         
+        // Initialize Reference Language ComboBox with default selection
+        cmbReferenceLang.SelectedIndex = 0; // Default to "RUS"
+        
         if (article != null)
         {
             LoadArticleData();
@@ -183,6 +186,23 @@ public partial class ArticleForm : Form
                 lstAuthors.Items.Add($"{authorNum}. {info.Surname} {info.Initials}");
             }
             authorNum++;
+        }
+
+        // Load references
+        lstReferences.Items.Clear();
+        if (Article.References?.ReferenceList.Any() == true)
+        {
+            int refNum = 1;
+            foreach (var reference in Article.References.ReferenceList)
+            {
+                var refInfo = reference.RefInfoList.FirstOrDefault();
+                if (refInfo != null)
+                {
+                    var langSuffix = !string.IsNullOrEmpty(refInfo.Lang) ? $" [{refInfo.Lang}]" : "";
+                    lstReferences.Items.Add($"{refNum}. {refInfo.Text}{langSuffix}");
+                }
+                refNum++;
+            }
         }
     }
 
@@ -353,6 +373,8 @@ public partial class ArticleForm : Form
             Article.Authors[i].Num = (uint)(i + 1);
         }
 
+        // References are already maintained via add/edit/remove handlers
+
         DialogResult = DialogResult.OK;
         Close();
     }
@@ -393,6 +415,81 @@ public partial class ArticleForm : Form
                 Article.Authors[lstAuthors.SelectedIndex] = authorForm.Author;
                 LoadArticleData();
             }
+        }
+    }
+
+    private void btnAddReference_Click(object? sender, EventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(txtReferenceText.Text))
+        {
+            MessageBox.Show("Пожалуйста, введите текст ссылки на источник литературы", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        if (Article.References == null)
+        {
+            Article.References = new References();
+        }
+
+        var reference = new Reference();
+        reference.RefInfoList.Add(new RefInfo
+        {
+            Lang = cmbReferenceLang.Text,
+            Text = txtReferenceText.Text
+        });
+        Article.References.ReferenceList.Add(reference);
+
+        txtReferenceText.Clear();
+        LoadArticleData();
+    }
+
+    private void btnEditReference_Click(object? sender, EventArgs e)
+    {
+        if (lstReferences.SelectedIndex < 0)
+        {
+            MessageBox.Show("Пожалуйста, выберите ссылку для редактирования", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        var reference = Article.References!.ReferenceList[lstReferences.SelectedIndex];
+        var refInfo = reference.RefInfoList.FirstOrDefault();
+        if (refInfo != null)
+        {
+            txtReferenceText.Text = refInfo.Text;
+            cmbReferenceLang.SelectedItem = refInfo.Lang ?? "RUS";
+        }
+
+        // Remove old and let user add updated version
+        Article.References.ReferenceList.RemoveAt(lstReferences.SelectedIndex);
+        if (!Article.References.ReferenceList.Any())
+        {
+            Article.References = null;
+        }
+        LoadArticleData();
+    }
+
+    private void btnRemoveReference_Click(object? sender, EventArgs e)
+    {
+        if (lstReferences.SelectedIndex < 0)
+        {
+            MessageBox.Show("Пожалуйста, выберите ссылку для удаления", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        var result = MessageBox.Show(
+            "Вы уверены, что хотите удалить эту ссылку?",
+            "Подтверждение удаления",
+            MessageBoxButtons.YesNo,
+            MessageBoxIcon.Question);
+
+        if (result == DialogResult.Yes)
+        {
+            Article.References!.ReferenceList.RemoveAt(lstReferences.SelectedIndex);
+            if (!Article.References.ReferenceList.Any())
+            {
+                Article.References = null;
+            }
+            LoadArticleData();
         }
     }
 

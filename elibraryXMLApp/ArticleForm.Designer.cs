@@ -86,9 +86,19 @@ partial class ArticleForm
         this.btnAddAuthor = new Button();
         this.btnEditAuthor = new Button();
         this.btnRemoveAuthor = new Button();
+        this.grpReferences = new GroupBox();
+        this.lstReferences = new ListBox();
+        this.txtReferenceText = new TextBox();
+        this.lblReferenceText = new Label();
+        this.cmbReferenceLang = new ComboBox();
+        this.lblReferenceLang = new Label();
+        this.btnAddReference = new Button();
+        this.btnEditReference = new Button();
+        this.btnRemoveReference = new Button();
         this.btnSave = new Button();
         this.btnCancel = new Button();
         this.grpAuthors.SuspendLayout();
+        this.grpReferences.SuspendLayout();
         this.tabControlFiles.SuspendLayout();
         this.tabPageFile.SuspendLayout();
         this.tabPageUrl.SuspendLayout();
@@ -816,22 +826,116 @@ partial class ArticleForm
         this.btnRemoveAuthor.UseVisualStyleBackColor = true;
         this.btnRemoveAuthor.Click += new EventHandler(this.btnRemoveAuthor_Click);
         // 
+        // grpReferences
+        // 
+        this.grpReferences.Controls.Add(this.btnRemoveReference);
+        this.grpReferences.Controls.Add(this.btnEditReference);
+        this.grpReferences.Controls.Add(this.btnAddReference);
+        this.grpReferences.Controls.Add(this.lstReferences);
+        this.grpReferences.Controls.Add(this.txtReferenceText);
+        this.grpReferences.Controls.Add(this.lblReferenceText);
+        this.grpReferences.Controls.Add(this.cmbReferenceLang);
+        this.grpReferences.Controls.Add(this.lblReferenceLang);
+        this.grpReferences.Location = new Point(20, 1420);
+        this.grpReferences.Name = "grpReferences";
+        this.grpReferences.Size = new Size(580, 230);
+        this.grpReferences.TabIndex = 48;
+        this.grpReferences.TabStop = false;
+        this.grpReferences.Text = "Источники литературы";
+        // 
+        // lstReferences
+        // 
+        this.lstReferences.FormattingEnabled = true;
+        this.lstReferences.ItemHeight = 15;
+        this.lstReferences.Location = new Point(10, 22);
+        this.lstReferences.Name = "lstReferences";
+        this.lstReferences.Size = new Size(430, 109);
+        this.lstReferences.TabIndex = 0;
+        // 
+        // lblReferenceText
+        // 
+        this.lblReferenceText.AutoSize = true;
+        this.lblReferenceText.Location = new Point(10, 140);
+        this.lblReferenceText.Name = "lblReferenceText";
+        this.lblReferenceText.Size = new Size(80, 15);
+        this.lblReferenceText.TabIndex = 1;
+        this.lblReferenceText.Text = "Текст ссылки:";
+        // 
+        // txtReferenceText
+        // 
+        this.txtReferenceText.Location = new Point(10, 158);
+        this.txtReferenceText.Multiline = true;
+        this.txtReferenceText.Name = "txtReferenceText";
+        this.txtReferenceText.Size = new Size(430, 60);
+        this.txtReferenceText.TabIndex = 2;
+        // 
+        // lblReferenceLang
+        // 
+        this.lblReferenceLang.AutoSize = true;
+        this.lblReferenceLang.Location = new Point(450, 140);
+        this.lblReferenceLang.Name = "lblReferenceLang";
+        this.lblReferenceLang.Size = new Size(40, 15);
+        this.lblReferenceLang.TabIndex = 3;
+        this.lblReferenceLang.Text = "Язык:";
+        // 
+        // cmbReferenceLang
+        // 
+        this.cmbReferenceLang.DropDownStyle = ComboBoxStyle.DropDownList;
+        this.cmbReferenceLang.FormattingEnabled = true;
+        this.cmbReferenceLang.Items.AddRange(new object[] {
+            "RUS",
+            "ENG"});
+        this.cmbReferenceLang.Location = new Point(450, 158);
+        this.cmbReferenceLang.Name = "cmbReferenceLang";
+        this.cmbReferenceLang.Size = new Size(120, 23);
+        this.cmbReferenceLang.TabIndex = 4;
+        // 
+        // btnAddReference
+        // 
+        this.btnAddReference.Location = new Point(450, 22);
+        this.btnAddReference.Name = "btnAddReference";
+        this.btnAddReference.Size = new Size(120, 30);
+        this.btnAddReference.TabIndex = 5;
+        this.btnAddReference.Text = "Добавить";
+        this.btnAddReference.UseVisualStyleBackColor = true;
+        this.btnAddReference.Click += new EventHandler(this.btnAddReference_Click);
+        // 
+        // btnEditReference
+        // 
+        this.btnEditReference.Location = new Point(450, 58);
+        this.btnEditReference.Name = "btnEditReference";
+        this.btnEditReference.Size = new Size(120, 30);
+        this.btnEditReference.TabIndex = 6;
+        this.btnEditReference.Text = "Редактировать";
+        this.btnEditReference.UseVisualStyleBackColor = true;
+        this.btnEditReference.Click += new EventHandler(this.btnEditReference_Click);
+        // 
+        // btnRemoveReference
+        // 
+        this.btnRemoveReference.Location = new Point(450, 94);
+        this.btnRemoveReference.Name = "btnRemoveReference";
+        this.btnRemoveReference.Size = new Size(120, 30);
+        this.btnRemoveReference.TabIndex = 7;
+        this.btnRemoveReference.Text = "Удалить";
+        this.btnRemoveReference.UseVisualStyleBackColor = true;
+        this.btnRemoveReference.Click += new EventHandler(this.btnRemoveReference_Click);
+        // 
         // btnSave
         // 
-        this.btnSave.Location = new Point(350, 1420);
+        this.btnSave.Location = new Point(350, 1670);
         this.btnSave.Name = "btnSave";
         this.btnSave.Size = new Size(120, 35);
-        this.btnSave.TabIndex = 46;
+        this.btnSave.TabIndex = 49;
         this.btnSave.Text = "Сохранить";
         this.btnSave.UseVisualStyleBackColor = true;
         this.btnSave.Click += new EventHandler(this.btnSave_Click);
         // 
         // btnCancel
         // 
-        this.btnCancel.Location = new Point(480, 1420);
+        this.btnCancel.Location = new Point(480, 1670);
         this.btnCancel.Name = "btnCancel";
         this.btnCancel.Size = new Size(120, 35);
-        this.btnCancel.TabIndex = 47;
+        this.btnCancel.TabIndex = 50;
         this.btnCancel.Text = "Отмена";
         this.btnCancel.UseVisualStyleBackColor = true;
         this.btnCancel.Click += new EventHandler(this.btnCancel_Click);
@@ -845,6 +949,7 @@ partial class ArticleForm
         this.MinimumSize = new Size(620, 500);
         this.Controls.Add(this.btnCancel);
         this.Controls.Add(this.btnSave);
+        this.Controls.Add(this.grpReferences);
         this.Controls.Add(this.grpAuthors);
         this.Controls.Add(this.btnRemoveFileUrl);
         this.Controls.Add(this.btnEditFileUrl);
@@ -897,6 +1002,8 @@ partial class ArticleForm
         this.StartPosition = FormStartPosition.CenterParent;
         this.Text = "Редактор статьи";
         this.grpAuthors.ResumeLayout(false);
+        this.grpReferences.ResumeLayout(false);
+        this.grpReferences.PerformLayout();
         this.tabControlFiles.ResumeLayout(false);
         this.tabPageFile.ResumeLayout(false);
         this.tabPageFile.PerformLayout();
@@ -1000,4 +1107,13 @@ partial class ArticleForm
     private Button btnRemoveAuthor;
     private Button btnSave;
     private Button btnCancel;
+    private GroupBox grpReferences;
+    private ListBox lstReferences;
+    private TextBox txtReferenceText;
+    private Label lblReferenceText;
+    private ComboBox cmbReferenceLang;
+    private Label lblReferenceLang;
+    private Button btnAddReference;
+    private Button btnEditReference;
+    private Button btnRemoveReference;
 }

@@ -80,6 +80,26 @@
           <dateAccepted>20.02.2024</dateAccepted>
           <datePublication>01.03.2024</datePublication>
         </dates>
+        <references>
+          <reference>
+            <refInfo lang="RUS">
+              <text>Иванов А.А. Основы машинного обучения. М.: Наука, 2020. 256 с.</text>
+            </refInfo>
+          </reference>
+          <reference>
+            <refInfo lang="RUS">
+              <text>Петров Б.Б., Сидоров В.В. Нейронные сети и глубокое обучение // Журнал вычислительной математики. 2021. Т. 15. № 3. С. 45-67.</text>
+            </refInfo>
+            <refInfo lang="ENG">
+              <text>Petrov B.B., Sidorov V.V. Neural networks and deep learning // Journal of Computational Mathematics. 2021. Vol. 15. No. 3. P. 45-67.</text>
+            </refInfo>
+          </reference>
+          <reference>
+            <refInfo lang="ENG">
+              <text>Smith J., Brown K. Machine Learning: A Comprehensive Guide. New York: Academic Press, 2019. 512 p.</text>
+            </refInfo>
+          </reference>
+        </references>
         <fundings>
           <funding lang="RUS">Исследование выполнено при финансовой поддержке РФФИ в рамках научного проекта № 20-01-00123</funding>
         </fundings>
@@ -126,6 +146,18 @@
           <doi>10.1234/example.2024.01.002</doi>
           <edn>GHIJKL</edn>
         </codes>
+        <references>
+          <reference>
+            <refInfo lang="RUS">
+              <text>Козлов Д.Д. Анализ данных в современной медицине. СПб.: Медицина, 2022. 320 с.</text>
+            </refInfo>
+          </reference>
+          <reference>
+            <refInfo lang="ENG">
+              <text>Johnson R., Lee S. Big Data Analytics in Healthcare // International Journal of Medical Informatics. 2020. Vol. 8. No. 2. P. 112-130.</text>
+            </refInfo>
+          </reference>
+        </references>
       </article>
     </articles>
   </issue>
