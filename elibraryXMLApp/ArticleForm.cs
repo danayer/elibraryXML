@@ -41,6 +41,7 @@ public partial class ArticleForm : Form
     
     private List<FileUrlEntry> fileUrlEntries = new List<FileUrlEntry>();
     private int editingEntryIndex = -1; // Index of entry being edited, -1 if adding new
+    private int editingReferenceIndex = -1; // Index of reference being edited, -1 if adding new
 
     public ArticleForm(Article? article = null)
     {
@@ -431,13 +432,29 @@ public partial class ArticleForm : Form
             Article.References = new References();
         }
 
-        var reference = new Reference();
-        reference.RefInfoList.Add(new RefInfo
+        if (editingReferenceIndex >= 0 && editingReferenceIndex < Article.References.ReferenceList.Count)
         {
-            Lang = cmbReferenceLang.Text,
-            Text = txtReferenceText.Text
-        });
-        Article.References.ReferenceList.Add(reference);
+            // Update existing reference in place
+            var existingRef = Article.References.ReferenceList[editingReferenceIndex];
+            var refInfo = existingRef.RefInfoList.FirstOrDefault();
+            if (refInfo != null)
+            {
+                refInfo.Text = txtReferenceText.Text;
+                refInfo.Lang = cmbReferenceLang.Text;
+            }
+            editingReferenceIndex = -1;
+        }
+        else
+        {
+            // Add new reference
+            var reference = new Reference();
+            reference.RefInfoList.Add(new RefInfo
+            {
+                Lang = cmbReferenceLang.Text,
+                Text = txtReferenceText.Text
+            });
+            Article.References.ReferenceList.Add(reference);
+        }
 
         txtReferenceText.Clear();
         LoadArticleData();
@@ -451,21 +468,19 @@ public partial class ArticleForm : Form
             return;
         }
 
-        var reference = Article.References!.ReferenceList[lstReferences.SelectedIndex];
+        if (Article.References == null || lstReferences.SelectedIndex >= Article.References.ReferenceList.Count)
+        {
+            return;
+        }
+
+        editingReferenceIndex = lstReferences.SelectedIndex;
+        var reference = Article.References.ReferenceList[editingReferenceIndex];
         var refInfo = reference.RefInfoList.FirstOrDefault();
         if (refInfo != null)
         {
             txtReferenceText.Text = refInfo.Text;
             cmbReferenceLang.SelectedItem = refInfo.Lang ?? "RUS";
         }
-
-        // Remove old and let user add updated version
-        Article.References.ReferenceList.RemoveAt(lstReferences.SelectedIndex);
-        if (!Article.References.ReferenceList.Any())
-        {
-            Article.References = null;
-        }
-        LoadArticleData();
     }
 
     private void btnRemoveReference_Click(object? sender, EventArgs e)
@@ -473,6 +488,11 @@ public partial class ArticleForm : Form
         if (lstReferences.SelectedIndex < 0)
         {
             MessageBox.Show("Пожалуйста, выберите ссылку для удаления", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        if (Article.References == null || lstReferences.SelectedIndex >= Article.References.ReferenceList.Count)
+        {
             return;
         }
 
@@ -484,11 +504,12 @@ public partial class ArticleForm : Form
 
         if (result == DialogResult.Yes)
         {
-            Article.References!.ReferenceList.RemoveAt(lstReferences.SelectedIndex);
+            Article.References.ReferenceList.RemoveAt(lstReferences.SelectedIndex);
             if (!Article.References.ReferenceList.Any())
             {
                 Article.References = null;
             }
+            editingReferenceIndex = -1;
             LoadArticleData();
         }
     }
